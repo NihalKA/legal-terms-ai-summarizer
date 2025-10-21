@@ -1,7 +1,7 @@
 # T&C Clarity - Legal Terms AI Summarizer
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
+[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.104+-green.svg)](https://fastapi.tiangolo.com/)
 [![LangChain](https://img.shields.io/badge/LangChain-0.1+-orange.svg)](https://www.langchain.com/)
 
@@ -64,7 +64,7 @@ This LLMOps project demonstrates production-ready implementation of:
 ## 🚀 Quick Start
 
 ### Prerequisites
-- Python 3.9+
+- Python 3.10+
 - Docker & Docker Compose
 - Git
 - Hugging Face API key (free tier available)
@@ -92,6 +92,7 @@ pip install -r requirements.txt
 cp .env.example .env
 # Edit .env with your settings:
 # - HUGGINGFACE_API_KEY
+# - LANGCHAIN_API_KEY
 # - DATABASE_URL
 # - REDIS_URL
 ```
@@ -101,14 +102,14 @@ cp .env.example .env
 docker-compose up -d
 ```
 
-5. **Run migrations**
+5. **Initialize database**
 ```bash
-alembic upgrade head
+python scripts/init_db.py
 ```
 
 6. **Start the API server**
 ```bash
-uvicorn app.main:app --reload
+uvicorn src.api.main:app --reload
 ```
 
 Visit `http://localhost:8000/docs` for interactive API documentation.
@@ -172,53 +173,62 @@ print(answer.text)
 
 ```
 tc-clarity/
-├── app/
-│   ├── api/
-│   │   ├── v1/
-│   │   │   ├── endpoints/
-│   │   │   │   ├── analyze.py
-│   │   │   │   ├── query.py
-│   │   │   │   └── documents.py
-│   │   │   └── router.py
+├── data/                    # All data storage
+│   ├── raw/                # Raw uploaded documents
+│   ├── processed/          # Processed/cleaned data
+│   ├── vector_store/       # ChromaDB vector store
+│   └── knowledge_base/     # Curated knowledge base
+├── src/                    # Source code
+│   ├── api/               # FastAPI application
+│   │   ├── main.py       # API entry point
+│   │   ├── routes/       # API endpoints
 │   │   └── dependencies.py
-│   ├── core/
-│   │   ├── config.py
-│   │   ├── security.py
+│   ├── rag/              # RAG implementation
+│   │   ├── retriever.py
+│   │   ├── generator.py
+│   │   └── embeddings.py
+│   ├── preprocessing/    # Document processing
+│   │   ├── pdf_parser.py
+│   │   ├── text_cleaner.py
+│   │   └── chunker.py
+│   ├── evaluation/       # Metrics & evaluation
+│   │   ├── metrics.py
+│   │   └── evaluators.py
+│   ├── monitoring/       # Observability
+│   │   ├── metrics.py
 │   │   └── logging.py
-│   ├── services/
-│   │   ├── document_processor.py
-│   │   ├── summarizer.py
-│   │   ├── risk_analyzer.py
-│   │   └── rag_engine.py
-│   ├── models/
-│   │   ├── database.py
-│   │   └── schemas.py
-│   ├── chains/
-│   │   ├── summarization_chain.py
-│   │   ├── qa_chain.py
-│   │   └── risk_detection_chain.py
-│   └── main.py
-├── tests/
+│   ├── database/         # Database models
+│   │   ├── models.py
+│   │   └── connection.py
+│   └── utils/            # Utility functions
+├── models/               # Downloaded model files
+│   ├── embeddings/
+│   └── summarization/
+├── prompts/              # Versioned prompts
+│   ├── summarization.py
+│   ├── risk_detection.py
+│   └── qa.py
+├── tests/                # Test suites
 │   ├── unit/
 │   ├── integration/
 │   └── evaluation/
-│       ├── test_datasets/
-│       └── metrics.py
-├── monitoring/
-│   ├── prometheus/
-│   │   └── prometheus.yml
+├── notebooks/            # Jupyter notebooks
+├── infra/                # Infrastructure as code
+│   ├── terraform/
+│   └── kubernetes/
+├── configs/              # Configuration files
+│   ├── prometheus.yml
 │   └── grafana/
-│       └── dashboards/
-├── scripts/
-│   ├── setup_db.py
+├── scripts/              # Utility scripts
+│   ├── init_db.py
 │   ├── seed_data.py
 │   └── evaluate_model.py
-├── docs/
+├── docs/                 # Documentation
 │   ├── API.md
 │   ├── ARCHITECTURE.md
 │   ├── DEPLOYMENT.md
 │   └── CONTRIBUTING.md
-├── .github/
+├── .github/              # CI/CD workflows
 │   └── workflows/
 │       ├── ci.yml
 │       ├── deploy.yml
@@ -229,6 +239,17 @@ tc-clarity/
 ├── .env.example
 └── README.md
 ```
+
+**Structure Explanation:**
+
+- `data/` - All data storage (documents, embeddings, knowledge base)
+- `src/` - All source code organized by function
+- `models/` - Downloaded/trained model files
+- `prompts/` - Version-controlled prompt templates
+- `tests/` - Test suites (unit, integration, evaluation)
+- `notebooks/` - Jupyter notebooks for experimentation
+- `infra/` - Infrastructure as code (Terraform, K8s configs)
+- `configs/` - Configuration files (Prometheus, Grafana)
 
 ## 🧪 Testing & Evaluation
 
@@ -253,9 +274,10 @@ python scripts/evaluate_model.py
 ## 📈 Monitoring
 
 Access monitoring dashboards:
-- **Grafana**: http://localhost:3000
-- **Prometheus**: http://localhost:9090
+- **API Docs**: http://localhost:8000/docs
 - **MLflow**: http://localhost:5000
+- **Grafana**: http://localhost:3000 (admin/admin)
+- **Prometheus**: http://localhost:9090
 
 Key metrics tracked:
 - API request latency
@@ -285,6 +307,7 @@ See [DEPLOYMENT.md](docs/DEPLOYMENT.md) for:
 
 ## 📚 Documentation
 
+- **[Phase 0: Setup Guide](https://ernihalka.atlassian.net/wiki/spaces/LLMOps/pages/426051)** - Complete setup instructions
 - [API Documentation](docs/API.md) - Complete API reference
 - [Architecture Guide](docs/ARCHITECTURE.md) - System design details
 - [Deployment Guide](docs/DEPLOYMENT.md) - Production deployment
@@ -292,28 +315,69 @@ See [DEPLOYMENT.md](docs/DEPLOYMENT.md) for:
 
 ## 🗺️ Roadmap
 
-### Phase 1: Core Features (Weeks 1-6) ✅
-- [x] Document processing pipeline
-- [x] Basic summarization
-- [x] Vector database integration
-- [x] RAG implementation
+### Phase 0: Setup (Week 1) ✅
+- [x] Project structure
+- [x] Development environment
+- [x] Docker services
 
-### Phase 2: Analysis Engine (Weeks 7-9) ✅
-- [x] Red flag detection
-- [x] Risk scoring
-- [x] Section classification
+### Phase 1: Core Infrastructure (Week 2) 🔄
+- [ ] Database models
+- [ ] API skeleton
+- [ ] Configuration management
 
-### Phase 3: LLMOps (Weeks 10-12) 🔄
-- [x] Monitoring setup
-- [x] Evaluation framework
-- [ ] CI/CD pipeline
+### Phase 2: Document Processing (Week 3)
+- [ ] PDF extraction
+- [ ] Text cleaning
+- [ ] Chunking logic
+
+### Phase 3: Embedding & Vector Store (Week 4)
+- [ ] Hugging Face integration
+- [ ] Generate embeddings
+- [ ] Chroma setup
+
+### Phase 4: RAG Pipeline (Week 5)
+- [ ] LangChain chains
+- [ ] Retrieval logic
+- [ ] Response generation
+
+### Phase 5: Analysis Engine (Week 6)
+- [ ] Summarization
+- [ ] Red flag detection
+- [ ] Risk scoring
+
+### Phase 6: API Endpoints (Week 7)
+- [ ] Upload endpoint
+- [ ] Analysis endpoint
+- [ ] Query endpoint
+
+### Phase 7: Caching & Optimization (Week 8)
+- [ ] Redis integration
+- [ ] Semantic caching
+
+### Phase 8: Monitoring Setup (Week 9)
+- [ ] Prometheus metrics
+- [ ] Grafana dashboards
+- [ ] LangSmith tracing
+
+### Phase 9: Evaluation Framework (Week 10)
+- [ ] Test dataset creation
+- [ ] Metrics implementation
+- [ ] MLflow integration
+
+### Phase 10: CI/CD Pipeline (Week 11)
+- [ ] GitHub Actions
 - [ ] Automated testing
+- [ ] Deployment automation
 
-### Phase 4: Advanced Features (Future)
-- [ ] Multi-language support
-- [ ] Comparison mode (multiple T&Cs)
-- [ ] Browser extension
-- [ ] Mobile app
+### Phase 11: Frontend (Week 12) - Optional
+- [ ] Streamlit UI
+- [ ] Upload interface
+- [ ] Results display
+
+### Phase 12: Documentation & Polish (Week 13)
+- [ ] Complete documentation
+- [ ] Demo video
+- [ ] Project presentation
 
 ## 🤝 Contributing
 
@@ -340,7 +404,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 **Project Maintainer**: Nihal KA
 - GitHub: [@NihalKA](https://github.com/NihalKA)
-- Project Link: [https://github.com/NihalKA/legal-terms-ai-summarizer](https://github.com/NihalKA/legal-terms-ai-summarizer)
+- Confluence: [LLMOps Space](https://ernihalka.atlassian.net/wiki/spaces/LLMOps)
+- Jira: [KAN Project](https://ernihalka.atlassian.net/jira/software/projects/KAN)
 
 ## 🔗 Related Projects
 
@@ -355,3 +420,5 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 📝 **Report issues** via GitHub Issues
 
 💡 **Share feedback** to help improve the project
+
+**Complete Setup Guide**: See [Phase 0 in Confluence](https://ernihalka.atlassian.net/wiki/spaces/LLMOps/pages/426051) for detailed setup instructions

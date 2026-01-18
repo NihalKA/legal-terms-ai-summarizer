@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>T&C Clarity - Legal Terms AI Analyzer</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <h1>⚖️ T&C Clarity</h1>
+            <p class="tagline">Understand hidden risks in legal documents before you sign</p>
+        </header>
+
+        <!-- Upload Section -->
+        <section class="upload-section" id="uploadSection">
+            <div class="upload-card">
+                <h2>Analyze Your Document</h2>
+                <p class="subtitle">Upload a PDF/TXT file or paste a URL to Terms & Conditions</p>
+                
+                <!-- File Upload -->
+                <div class="upload-option">
+                    <label for="fileInput" class="file-label">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="17 8 12 3 7 8"></polyline>
+                            <line x1="12" y1="3" x2="12" y2="15"></line>
+                        </svg>
+                        <span>Choose File (PDF or TXT)</span>
+                    </label>
+                    <input type="file" id="fileInput" accept=".pdf,.txt" style="display: none;">
+                    <span id="fileName" class="file-name"></span>
+                </div>
+
+                <div class="separator">
+                    <span>OR</span>
+                </div>
+
+                <!-- URL Input -->
+                <div class="upload-option">
+                    <input type="url" id="urlInput" placeholder="Paste URL to Terms & Conditions (e.g., https://example.com/terms.pdf)" class="url-input">
+                </div>
+
+                <div class="separator">
+                    <span>OR</span>
+                </div>
+
+                <!-- Text Input -->
+                <div class="upload-option">
+                    <label for="textInput" style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--gray-700);">
+                        📝 Paste Text Directly
+                    </label>
+                    <textarea id="textInput" placeholder="Copy and paste your Terms & Conditions text here (minimum 50 characters)..." class="text-input" rows="6"></textarea>
+                </div>
+
+                <button id="analyzeBtn" class="analyze-btn" disabled>
+                    <span class="btn-text">Analyze Document</span>
+                    <span class="loader" style="display: none;"></span>
+                </button>
+
+                <div class="info-box">
+                    <strong>📌 What we analyze:</strong> Interest rates, hidden fees, penalties, termination clauses, your obligations, security/collateral requirements, and more.
+                </div>
+            </div>
+        </section>
+
+        <!-- Loading Section -->
+        <section class="loading-section" id="loadingSection" style="display: none;">
+            <div class="loading-card">
+                <div class="spinner"></div>
+                <h3>Analyzing your document...</h3>
+                <p id="loadingStatus">Uploading document...</p>
+                <div class="loading-steps">
+                    <div class="step" id="step1">✓ Document uploaded</div>
+                    <div class="step" id="step2">⏳ Extracting text...</div>
+                    <div class="step" id="step3">⏳ Analyzing 16 legal categories...</div>
+                    <div class="step" id="step4">⏳ AI scanning for hidden clauses...</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Results Section -->
+        <section class="results-section" id="resultsSection" style="display: none;">
+            <!-- Risk Alert Banner -->
+            <div class="risk-banner" id="riskBanner">
+                <div class="risk-icon"></div>
+                <div class="risk-content">
+                    <h2 id="riskLevel">Risk Level</h2>
+                    <p id="riskSummary">Risk summary</p>
+                </div>
+            </div>
+
+            <!-- Document Info -->
+            <div class="doc-info-card">
+                <h3>📄 Document Information</h3>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <span class="info-label">Source:</span>
+                        <span id="docSource">-</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Length:</span>
+                        <span id="docLength">-</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Clauses Found:</span>
+                        <span id="clausesFound">-</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Analysis Time:</span>
+                        <span id="analysisTime">-</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Findings Summary -->
+            <div class="summary-card">
+                <h3>📊 Key Findings Summary</h3>
+                <div class="findings-grid" id="findingsGrid">
+                    <!-- Populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Detailed Clauses -->
+            <div class="clauses-container" id="clausesContainer">
+                <h3>🔍 Detailed Findings (Click to Expand)</h3>
+                <div id="clausesAccordion">
+                    <!-- Populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Legal Glossary -->
+            <div class="glossary-card">
+                <h3>📖 Legal Terms Explained</h3>
+                <button class="toggle-glossary" id="toggleGlossary">Show Glossary ▼</button>
+                <div class="glossary-content" id="glossaryContent" style="display: none;">
+                    <!-- Populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Action Items -->
+            <div class="action-card">
+                <h3>✅ Before You Sign - Questions to Ask</h3>
+                <ul id="actionItems">
+                    <li>What is the exact interest rate? Can it change?</li>
+                    <li>What are ALL the fees I'll pay (processing, annual, prepayment)?</li>
+                    <li>What happens if I miss 2-3 payments?</li>
+                    <li>Can you terminate the loan? Under what conditions?</li>
+                    <li>What property/assets are at risk if I can't repay?</li>
+                    <li>Can you change terms without my consent?</li>
+                    <li>Is there a grace period for late payments?</li>
+                    <li>Can I prepay without penalty?</li>
+                </ul>
+            </div>
+
+            <!-- Actions -->
+            <div class="action-buttons">
+                <button class="btn-secondary" id="downloadBtn">Download Report</button>
+                <button class="btn-primary" id="analyzeAnotherBtn">Analyze Another Document</button>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>⚠️ <strong>Disclaimer:</strong> This is AI-assisted analysis for informational purposes only. Always consult a qualified lawyer before signing legal agreements.</p>
+            <p class="footer-note">T&C Clarity MVP v1.0 | Powered by Pattern Matching + AI</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

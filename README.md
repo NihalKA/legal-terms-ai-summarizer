@@ -1,73 +1,76 @@
-# T&C Clarity - Legal Terms AI Summarizer
+# T&C Clarity - Legal Terms AI Summarizer (MVP)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
-[![FastAPI](https://img.shields.io/badge/FastAPI-0.104+-green.svg)](https://fastapi.tiangolo.com/)
-[![LangChain](https://img.shields.io/badge/LangChain-0.1+-orange.svg)](https://www.langchain.com/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.109+-green.svg)](https://fastapi.tiangolo.com/)
 
-An intelligent application that analyzes Terms & Conditions documents to extract key information, identify hidden clauses, and provide plain-language summaries. Never blindly accept T&Cs again!
+An intelligent application that analyzes Terms & Conditions documents to extract key legal clauses, identify risks, and provide plain-language explanations. Analyze loan agreements, contracts, and T&Cs before signing!
+
+> **Status**: Phase 2 Complete! ✅ Comprehensive legal risk analysis with 16 pattern categories + AI catch-all working!
+
+> **MVP Approach**: Functional, simple implementation focused on getting core features working. Clean code, minimal complexity, maximum learning.
 
 ## 🎯 Project Overview
 
-This LLMOps project demonstrates production-ready implementation of:
-- **OpenAPI** - RESTful API design and documentation
-- **Hugging Face** - LLM models for summarization and embeddings
-- **Vector Database** - Semantic search using ChromaDB
-- **LangChain** - LLM workflow orchestration
-- **MLOps Best Practices** - Monitoring, versioning, and evaluation
+This is an LLMOps learning project with a **pragmatic MVP approach**:
+- Simple, readable code structure (everything starts in `app.py`)
+- Three input methods: Copy-paste text, URL scraping, File upload (PDF/TXT)
+- PostgreSQL for document storage
+- Ready for incremental feature additions (summarization, RAG, red flags)
 
-## ✨ Features
+## ✨ Features (Currently Working)
 
-### Core Capabilities
-- 📄 **Multi-format Support** - Process PDF, text files, and web URLs
-- 🎯 **Smart Summarization** - Generate concise executive summaries
-- 🚩 **Red Flag Detection** - Identify concerning clauses automatically
-- 📊 **Risk Scoring** - Calculate overall risk score (0-100)
-- 💬 **Interactive Q&A** - RAG-powered question answering
-- 🔍 **Semantic Search** - Find similar clauses across documents
-- 📑 **Section Classification** - Automatically categorize T&C sections
+### ✅ Phase 1: Core Upload & Storage (COMPLETE)
+- 📄 **3 Input Methods** - Copy-paste text, URL scraping, or file upload (PDF/TXT)
+- 💾 **PostgreSQL Storage** - Persistent document storage
+- 🐳 **Docker Setup** - One-command database deployment
+- 📡 **REST API** - FastAPI with interactive docs
 
-### LLMOps Features
-- 🔄 **Experiment Tracking** - MLflow integration
-- 📈 **Monitoring** - Prometheus + Grafana dashboards
-- 🧪 **Automated Testing** - Evaluation metrics (ROUGE, accuracy)
-- 🚀 **CI/CD Pipeline** - GitHub Actions automation
-- 📝 **Prompt Versioning** - Git-based prompt management
-- ⚡ **Performance Optimization** - Redis caching
+### ✅ Phase 2: Legal Risk Analysis (COMPLETE)
+- 🔍 **16 Pattern Categories** - Interest rates, fees, penalties, termination rights, obligations, security/collateral, loan amount, repayment terms, loan duration, default consequences, change terms rights, grace period, insurance requirements, personal guarantee, prepayment rules, jurisdiction
+- 🤖 **AI Catch-All** - Flan-T5 finds unusual/hidden clauses missed by patterns
+- ⚠️ **Risk Assessment** - HIGH/MEDIUM/LOW risk classification
+- 📊 **Comprehensive Analysis** - Finds 20-30 critical clauses in 10-20 seconds
+- 📖 **Legal Glossary** - Plain-language explanations of legal terms
+- 💻 **Web UI** - Clean interface with file/URL/text input
 
-## 🏗️ Architecture
+### 🚧 Coming Next (Phase 3)
+- 💬 **Interactive Q&A** - RAG-powered questions about your document
+- 🔍 **Semantic Search** - ChromaDB vector store integration
+- 📊 **Document Com (Current)
 
 ```
-┌─────────────────┐
-│   Frontend/CLI  │
-└────────┬────────┘
-         │
-    ┌────▼────────────┐
-    │   FastAPI       │
-    │   REST API      │
-    └────┬────────────┘
-         │
-    ┌────▼────────────────────────┐
-    │    LangChain Orchestration  │
-    └───┬─────────────┬───────────┘
-        │             │
-   ┌────▼───┐   ┌────▼──────────┐
-   │ HF     │   │  ChromaDB     │
-   │ Models │   │  Vector Store │
-   └────────┘   └───────────────┘
-         │             │
-    ┌────▼─────────────▼───┐
-    │   PostgreSQL DB      │
+┌─────────────────────────┐
+│   Web UI (frontend/)    │
+│   - File/URL/Text input │
+│   - Results display     │
+└───────────┬─────────────┘
+            │
+       ┌────▼────────────────┐
+       │   FastAPI Backend   │
+       │   (app.py)          │
+       └───┬────────────┬────┘
+           │            │
+    ┌──────▼──────┐   ┌▼──────────────┐
+    │ Flan-T5 AI  │   │ PostgreSQL DB │
+    │ (3GB model) │   │ (via Docker)  │
+    └─────────────┘   └───────────────┘
+```
+
+**Tech Stack:**
+- **Backend**: FastAPI, SQLAlchemy, PyPDF2, BeautifulSoup
+- **AI**: Hugging Face Transformers (Flan-T5-large)
+- **Database**: PostgreSQL
+- **Frontend**: Pure HTML/CSS/JavaScript
+- **Infrastructure**: Docker, uvicorn │   PostgreSQL DB      │
     └──────────────────────┘
 ```
 
-## 🚀 Quick Start
+## 🚀 Quick Start (5 Minutes!)
 
 ### Prerequisites
 - Python 3.10+
-- Docker & Docker Compose
-- Git
-- Hugging Face API key (free tier available)
+- 4GB+ RAM (for AI model)
 
 ### Installation
 
@@ -77,234 +80,113 @@ git clone https://github.com/NihalKA/legal-terms-ai-summarizer.git
 cd legal-terms-ai-summarizer
 ```
 
-2. **Set up environment**
-```bash
-# Create virtual environment
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-
-# Install dependencies
-pip install -r requirements.txt
-```
-
-3. **Configure environment variables**
-```bash
-cp .env.example .env
-# Edit .env with your settings:
-# - HUGGINGFACE_API_KEY
-# - LANGCHAIN_API_KEY
-# - DATABASE_URL
-# - REDIS_URL
-```
-
-4. **Start services with Docker**
+2. **Start PostgreSQL**
 ```bash
 docker-compose up -d
 ```
 
-5. **Initialize database**
+3. **Set up Python environment**
 ```bash
-python scripts/init_db.py
+# Create virtual environment and install dependencies
+uv sync
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 ```
 
-6. **Start the API server**
+4. **Run the backend**
 ```bash
-uvicorn src.api.main:app --reload
+python app.py
 ```
+⏳ First run downloads Flan-T5 model (3GB) - takes 2-5 minutes
 
-Visit `http://localhost:8000/docs` for interactive API documentation.
-
-## 📖 Usage
-
-### API Endpoints
-
-#### Upload and Analyze Document
+5. **Open the UI**
 ```bash
-curl -X POST "http://localhost:8000/api/v1/analyze" \
-  -H "Content-Type: multipart/form-data" \
-  -F "file=@terms.pdf"
+# In a new terminal
+open frontend/index.html
 ```
 
-#### Query Document with RAG
+Visit **http://localhost:8000/docs** for
+Visit **http://localhost:8000/docs** for interactive API documentation!
+
+## Web UI (Recommended)
+1. Open `frontend/index.html` in your browser
+2. Choose input method:
+   - **File Upload**: Select PDF/TXT (e.g., loan agreement)
+   - **URL**: Enter terms page URL
+   - **Text**: Paste T&C text directly (50+ chars)
+3. Click "Analyze Document"
+4. Wait 10-20 seconds for comprehensive analysis
+5. Review risk level, key clauses, and glossary
+
+### API Usage
+
+#### 1. Upload Document (3 Methods)
 ```bash
-curl -X POST "http://localhost:8000/api/v1/query" \
-  -H "Content-Type: application/json" \
-  -d '{"document_id": "123", "question": "What data do they collect?"}'
+# Option 1: Copy-Paste Text
+curl -X POST "http://localhost:8000/analyze" \
+  -F "text_input=Your terms and conditions text here..."
+
+# Option 2: URL Scraping
+curl -X POST "http://localhost:8000/analyze" \
+  -F "url=https://example.com/terms"
+
+# Option 3: File Upload (PDF or TXT)
+curl -X POST "http://localhost:8000/analyze" \
+  -F "file=@path/to/terms.pdf"
 ```
 
-#### Get Risk Analysis
+#### 2. Get Comprehensive Analysis
 ```bash
-curl -X GET "http://localhost:8000/api/v1/documents/123/risks"
+curl "http://localhost:8000/summarize/{doc_id}?method=comprehensive"
 ```
 
-### Python SDK Example
-```python
-from tc_clarity import TCClarityClient
+Returns:
+- ⚠️ Risk level (HIGH/MEDIUM/LOW)
+- 📊 17 category findings summary
+- 📋 20-30 extracted key clauses
+- 📖 Legal terms glossary
+- ⚡ 10-20 second analysis time
 
-client = TCClarityClient(api_key="your-api-key")
-
-# Analyze document
-result = client.analyze_document("path/to/terms.pdf")
-
-print(f"Risk Score: {result.risk_score}/100")
-print(f"Summary: {result.summary}")
-print(f"Red Flags: {result.red_flags}")
-
-# Ask questions
-answer = client.query("What is the refund policy?", result.document_id)
-print(answer.text)
-```
-
-## 🛠️ Technology Stack
-
-| Component | Technology | Purpose |
-|-----------|-----------|---------|
-| **API Framework** | FastAPI | REST API with OpenAPI docs |
-| **LLM Orchestration** | LangChain | Chain workflows, RAG |
-| **Models** | Hugging Face | BART, Sentence Transformers |
-| **Vector DB** | ChromaDB | Semantic search |
-| **Database** | PostgreSQL | Document metadata |
-| **Cache** | Redis | Semantic caching |
-| **Monitoring** | Prometheus + Grafana | Metrics & dashboards |
-| **Experiment Tracking** | MLflow | Model versioning |
-| **Tracing** | LangSmith | LLM call debugging |
-
-## 📊 Project Structure
-
-```
-tc-clarity/
-├── data/                    # All data storage
-│   ├── raw/                # Raw uploaded documents
-│   ├── processed/          # Processed/cleaned data
-│   ├── vector_store/       # ChromaDB vector store
-│   └── knowledge_base/     # Curated knowledge base
-├── src/                    # Source code
-│   ├── api/               # FastAPI application
-│   │   ├── main.py       # API entry point
-│   │   ├── routes/       # API endpoints
-│   │   └── dependencies.py
-│   ├── rag/              # RAG implementation
-│   │   ├── retriever.py
-│   │   ├── generator.py
-│   │   └── embeddings.py
-│   ├── preprocessing/    # Document processing
-│   │   ├── pdf_parser.py
-│   │   ├── text_cleaner.py
-│   │   └── chunker.py
-│   ├── evaluation/       # Metrics & evaluation
-│   │   ├── metrics.py
-│   │   └── evaluators.py
-│   ├── monitoring/       # Observability
-│   │   ├── metrics.py
-│   │   └── logging.py
-│   ├── database/         # Database models
-│   │   ├── models.py
-│   │   └── connection.py
-│   └── utils/            # Utility functions
-├── models/               # Downloaded model files
-│   ├── embeddings/
-│   └── summarization/
-├── prompts/              # Versioned prompts
-│   ├── summarization.py
-│   ├── risk_detection.py
-│   └── qa.py
-├── tests/                # Test suites
-│   ├── unit/
-│   ├── integration/
-│   └── evaluation/
-├── notebooks/            # Jupyter notebooks
-├── infra/                # Infrastructure as code
-│   ├── terraform/
-│   └── kubernetes/
-├── configs/              # Configuration files
-│   ├── prometheus.yml
-│   └── grafana/
-├── scripts/              # Utility scripts
-│   ├── init_db.py
-│   ├── seed_data.py
-│   └── evaluate_model.py
-├── docs/                 # Documentation
-│   ├── API.md
-│   ├── ARCHITECTURE.md
-│   ├── DEPLOYMENT.md
-│   └── CONTRIBUTING.md
-├── .github/              # CI/CD workflows
-│   └── workflows/
-│       ├── ci.yml
-│       ├── deploy.yml
-│       └── evaluate.yml
-├── docker-compose.yml
-├── Dockerfile
-├── requirements.txt
-├── .env.example
-└── README.md
-```
-
-**Structure Explanation:**
-
-- `data/` - All data storage (documents, embeddings, knowledge base)
-- `src/` - All source code organized by function
-- `models/` - Downloaded/trained model files
-- `prompts/` - Version-controlled prompt templates
-- `tests/` - Test suites (unit, integration, evaluation)
-- `notebooks/` - Jupyter notebooks for experimentation
-- `infra/` - Infrastructure as code (Terraform, K8s configs)
-- `configs/` - Configuration files (Prometheus, Grafana)
-
-## 🧪 Testing & Evaluation
-
-### Run Tests
+### Test All Features
 ```bash
-# Unit tests
-pytest tests/unit -v
-
-# Integration tests
-pytest tests/integration -v
-
-# Evaluation metrics
-python scripts/evaluate_model.py
+python test_api.py
 ```
 
-### Evaluation Metrics
-- **Summarization**: ROUGE-L > 0.4
-- **Red Flag Detection**: Accuracy > 85%
-- **RAG Answer Relevance**: > 80%
-- **API Latency**: p95 < 2 seconds
-
-## 📈 Monitoring
-
-Access monitoring dashboards:
-- **API Docs**: http://localhost:8000/docs
-- **MLflow**: http://localhost:5000
-- **Grafana**: http://localhost:3000 (admin/admin)
-- **Prometheus**: http://localhost:9090
-
-Key metrics tracked:
-- API request latency
-- Model inference time
-- Token usage
-- Cache hit rate
-- Error rates
-- Red flag detection accuracy
-
-## 🚢 Deployment
-
-### Docker Deployment
-```bash
-# Build image
-docker build -t tc-clarity:latest .
-
-# Run container
-docker run -p 8000:8000 --env-file .env tc-clarity:latest
+### Interactive API Docs
+legal-terms-ai-summarizer/
+├── app.py                    # 🎯 Backend API (950 lines)
+│                             #    - 3 input methods
+│                             #    - 16 pattern categories
+│                             #    - AI catch-all
+│                             #    - Risk calculation
+│
+├── frontend/                 # 💻 Web UI
+│   ├── index.html           #    Main page (3 input methods)
+│   ├── styles.css           #    Modern card-based design
+│   ├── script.js            #    API integration
+│   └── README.md            #    Frontend docs
+│
+├── docker-compose.yml        # 🐳 PostgreSQL setup
+├── pyproject.toml            # 📦 Dependencies
+├── test_api.py              # ✅ API tests
+│
+├── data/                    # 💾 Storage (auto-created)
+│   ├── raw/                # Uploaded files
+│   ├── processed/          # Processed data
+│   └── vector_store/       # ChromaDB (Phase 3)
+│
+├── docs/                    # 📚 Documentation
+│   ├── API_MVP.md          # API reference
+│   ├── MVP_GUIDE.md        # Development guide
+│   └── NEXT_STEPS.md       # Feature roadmap
+│
+└── README.md               # This file
 ```
 
-### Cloud Deployment
-See [DEPLOYMENT.md](docs/DEPLOYMENT.md) for:
-- AWS deployment guide
-- GCP deployment guide
-- Azure deployment guide
-- Kubernetes manifests
-
+**Current Philosophy:**
+- ✅ **Working**: Phases 1 & 2 complete (upload + analysis)
+- ✅ **Simple**: Main logic in app.py (950 lines)
+- ✅ **Tested**: ABCD loan document finds 30 clauses in 15 seconds
+- ✅ **Ready**: Foundation for Phase 3 (RAG Q&A)
 ## 📚 Documentation
 
 - **[Phase 0: Setup Guide](https://ernihalka.atlassian.net/wiki/spaces/LLMOps/pages/426051)** - Complete setup instructions
@@ -363,62 +245,73 @@ See [DEPLOYMENT.md](docs/DEPLOYMENT.md) for:
 - [ ] Test dataset creation
 - [ ] Metrics implementation
 - [ ] MLflow integration
+Development Roadmap
 
-### Phase 10: CI/CD Pipeline (Week 11)
-- [ ] GitHub Actions
-- [ ] Automated testing
-- [ ] Deployment automation
+### ✅ Phase 1: Core Upload & Storage (COMPLETE)
+- [x] Three input methods (text, URL, file)
+- [x] PDF & TXT extraction
+- [x] URL scraping with BeautifulSoup
+- [x] PostgreSQL storage
+- [x] Basic CRUD endpoints
+- [x] Docker setup
+- [x] API test suite
 
-### Phase 11: Frontend (Week 12) - Optional
-- [ ] Streamlit UI
-- [ ] Upload interface
-- [ ] Results display
+### ✅ Phase 2: Legal Risk Analysis (COMPLETE)
+- [x] 16 pattern categories with 100+ regex patterns
+- [x] Flan-T5 AI catch-all for unusual clauses
+- [x] Risk level calculation (HIGH/MEDIUM/LOW)
+- [x] `/summarize/{doc_id}` endpoint
+- [x] Legal terms glossary
+- [x] Web UI (file/URL/text input)
+- [x] Results display with accordion
+- [x] Download report feature
 
-### Phase 12: Documentation & Polish (Week 13)
-- [ ] Complete documentation
-- [ ] Demo video
-- [ ] Project presentation
+**Current Status:** 30 clauses found in 15 seconds (ABCD test), HIGH RISK classification working correctly
 
-## 🤝 Contributing
+### 🚧 Phase 3: RAG Q&A System (Next - 1 week)
+- [ ] Set up ChromaDB vector store
+- [ ] Chunk documents (500-word chunks, 50-word overlap)
+- [ ] Generate embeddings with sentence-transformers
+- [ ] Create `/ask/{doc_id}` endpoint
+- [ ] Context-aware Q&A (e.g., "What happens if I miss 2 payments?")
+- [ ] Add Q&A section to web UI
 
-Contributions are welcome! Please see [CONTRIBUTING.md](docs/CONTRIBUTING.md) for guidelines.
+### 📋 Phase 4: Enhancements (Future)
+- [ ] Document comparison feature
+- [ ] Multi-language support (Hindi, Spanish)
+- [ ] Export to PDF report
+- [ ] Save analysis history
+- [ ] Caching with Redis
+- [ ] Monitoring & metrics
+- [ ] CI/CD pipeline
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+### 🎯 Long-term Vision
+- [ ] Mobile app
+- [ ] Browser extension
+- [ ] Document type detection (loan/employment/rental/SaaS)
+- [ ] Specialized patterns per document type
+- [ ] Collaborative analysis (share with lawyer)extraction & web scraping (PyPDF2, BeautifulSoup)
+- ✅ Docker containerization
+- ✅ AI model integration (Hugging Face Transformers)
+- ✅ Regex pattern matching for legal text
+- ✅ Hybrid AI approach (patterns + ML)
+- ✅ Frontend-backend integration
+- 🚧 Vector databases & embeddings (Phase 3)
+- 🚧 RAG (Retrieval-Augmented Generation) (Phase 3)
 
-## 📄 License
+## 📚 Documentation
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+- **[docs/API_MVP.md](docs/API_MVP.md)** - Complete API reference
+- **[docs/MVP_GUIDE.md](docs/MVP_GUIDE.md)** - Development philosophy  
+- **[docs/NEXT_STEPS.md](docs/NEXT_STEPS.md)** - Implementation guides
+- **[frontend/README.md](frontend/README.md)** - UI documentation
+- **Interactive API Docs**: http://localhost:8000/docs
 
-## 🙏 Acknowledgments
+## 🎯 Key Achievements
 
-- Hugging Face for providing excellent pre-trained models
-- LangChain community for orchestration framework
-- FastAPI for the amazing web framework
-- ChromaDB for vector database capabilities
-
-## 📧 Contact
-
-**Project Maintainer**: Nihal KA
-- GitHub: [@NihalKA](https://github.com/NihalKA)
-- Confluence: [LLMOps Space](https://ernihalka.atlassian.net/wiki/spaces/LLMOps)
-- Jira: [KAN Project](https://ernihalka.atlassian.net/jira/software/projects/KAN)
-
-## 🔗 Related Projects
-
-- [LangChain](https://github.com/langchain-ai/langchain)
-- [ChromaDB](https://github.com/chroma-core/chroma)
-- [FastAPI](https://github.com/tiangolo/fastapi)
-
----
-
-⭐ **Star this repo** if you find it helpful!
-
-📝 **Report issues** via GitHub Issues
-
-💡 **Share feedback** to help improve the project
-
-**Complete Setup Guide**: See [Phase 0 in Confluence](https://ernihalka.atlassian.net/wiki/spaces/LLMOps/pages/426051) for detailed setup instructions
+- ⚡ **Fast Analysis**: 20-30 clauses in 10-20 seconds
+- 🎯 **Accurate**: Finds interest rates, penalties, hidden termination rights
+- 🔍 **Comprehensive**: 16 pattern categories + AI catch-all
+- 💻 **User-Friendly**: Clean web UI with 3 input methods
+- 📖 **Educational**: Legal glossary explains complex terms
+- 🏗️ **Solid Foundation**: Ready for Phase 3 RAG Q&A

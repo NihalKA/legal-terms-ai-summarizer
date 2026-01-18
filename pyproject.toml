@@ -1,0 +1,59 @@
+[project]
+name = "legal-terms-ai-summarizer"
+version = "1.0.0"
+description = "T&C Clarity - Legal Terms AI Summarizer with RAG capabilities"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+authors = [
+    {name = "NihalKA"}
+]
+keywords = ["legal", "terms-and-conditions", "ai", "summarization", "rag", "llmops"]
+
+dependencies = [
+    # Core API Framework
+    "fastapi==0.109.0",
+    "uvicorn[standard]==0.27.0",
+    "pydantic>=2.6.0",
+    "python-multipart==0.0.6",
+    
+    # Database
+    "sqlalchemy>=2.0.35",
+    "psycopg[binary]>=3.1.0",
+    
+    # Document Processing
+    "PyPDF2==3.0.1",
+    "requests==2.31.0",
+    "beautifulsoup4==4.12.3",
+    "lxml==5.1.0",
+    
+    # Utilities
+    "python-dotenv==1.0.0",
+    
+    # AI/ML Libraries (Phase 2: Summarization)
+    # Requires: Xcode Command Line Tools (xcode-select --install)
+    "transformers==4.37.2",
+    "torch>=2.3.0",
+    
+    # Phase 3: ChromaDB & RAG (uncomment when needed)
+    # "sentence-transformers==2.3.1",
+    # "chromadb==0.4.22",
+    # "langchain==0.1.5",
+    # "langchain-community==0.0.17",
+]
+
+[project.urls]
+Homepage = "https://github.com/NihalKA/legal-terms-ai-summarizer"
+Repository = "https://github.com/NihalKA/legal-terms-ai-summarizer"
+Issues = "https://github.com/NihalKA/legal-terms-ai-summarizer/issues"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["."]
+only-include = ["app.py", "test_api.py"]
+
+[dependency-groups]
+dev = []
